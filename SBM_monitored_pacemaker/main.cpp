@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Data used to provide debug info
 #ifdef DEBUG_OUT
 	sc_time prev_V, prev_A, prev_S, LRL[100], I1[100], I2[100], I3[100], I4[100], I5[100], I6[100];
 	unsigned int ilrl, i1, i2, i3, i4, i5, i6;
@@ -19,6 +20,7 @@ int sc_main(int a, char* b[])
 
 #ifdef DEBUG_OUT
 	prev_V=prev_A=prev_S=sc_time(0, SC_MS);
+	ilrl=i1=i2=i3=i4=i5=i6=0;
 #endif
 
 	// Channels for the connection between the test bench and the main system
@@ -35,6 +37,11 @@ int sc_main(int a, char* b[])
 	//// Stimulated ventricular
 	sc_csp_channel< bool >   SV_COLLECTOR_2_DISPLAY_4_SV(4,SV_COLLECTOR_id,DISPLAY_id);
 
+	// DFM
+	sc_csp_channel< bool >   DFM_UTF_2_DISPLAY_4_UTF(57,DFM_UTF_id,DISPLAY_id);
+	sc_csp_channel< UNE_info >   DFM_UNE_2_DISPLAY_4_UNE(59,DFM_UNE_id,DISPLAY_id);
+	sc_csp_channel< bool >   DFM_USS_2_DISPLAY_4_USS(62,DFM_USS_id,DISPLAY_id);
+
 	// Instantiation and connection of testbench and system
 
 	stim_gen mystimgen("mystimgen");
@@ -48,14 +55,20 @@ int sc_main(int a, char* b[])
 	mysystem.f(STIMULUS_2_CORE_4_ref_freq);
 	mysystem.SA(AEIr_2_DISPLAY_4_SA);
 	mysystem.SV(SV_COLLECTOR_2_DISPLAY_4_SV);
+	mysystem.UTF(DFM_UTF_2_DISPLAY_4_UTF);
+	mysystem.UNE(DFM_UNE_2_DISPLAY_4_UNE);
+	mysystem.USS(DFM_USS_2_DISPLAY_4_USS);
 
 	display mydisplay("mydisplay");
 	mydisplay.SA(AEIr_2_DISPLAY_4_SA); 
 	mydisplay.SV(SV_COLLECTOR_2_DISPLAY_4_SV); 
+	mydisplay.UTF(DFM_UTF_2_DISPLAY_4_UTF);
+	mydisplay.UNE(DFM_UNE_2_DISPLAY_4_UNE);
+	mydisplay.USS(DFM_USS_2_DISPLAY_4_USS);
 
 	// Start simulation
 	//sc_start();
-	sc_start(sc_time(1001*20+1, SC_MS));
+	sc_start( sc_time(1000*20+19, SC_MS) );
 
 	// Simulation end
 	cout << "Simulation finished at simulated time: " << sc_time_stamp() << endl;

@@ -48,7 +48,7 @@ enum ps_id {STIMULUS_id, DISPLAY_id, CORE_id, PVARP_id, AEIr_id, BP_id, CSW_id, 
 // Timer granularity
 #define DEFAULT_GRANULARITY sc_time(1, SC_MS)
 
-//// Macro to reuse the same code used for timing simulation
+//// Macro to resue the same code also for timing simulation
 #define HEPSY_S(X)
 #define HEPSY_P(X)
 #define PRE_WAIT(X)

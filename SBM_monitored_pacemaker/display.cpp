@@ -65,5 +65,56 @@ void display::SV_output()
 	}
 }
 
+//// DFM
+
+// Print UTF info
+void display::UTF_output()
+{
+	while(true)
+	{
+		// Read from channel
+		UTF->read();
+
+		// Write output
+		cout << "(DISPLAY) Received UTF at time \t" << sc_time_stamp() << endl;
+
+		system("pause"); cout << endl;
+	}
+}
+
+// Print UNE info
+void display::UNE_output()
+{
+	UNE_info temp;
+
+	while(true)
+	{
+		// Read from channel
+		temp=UNE->read();
+
+		// Write output
+		cout << "(DISPLAY) Received UNE at time \t" << sc_time_stamp() << " :" << temp.UNE_state << "/" << temp.UNE_type <<  endl;
+
+		system("pause"); cout << endl;
+	}
+}
+
+// Print USS info
+void display::USS_output()
+{
+	while(true)
+	{
+		// Read from channel
+		USS->read();
+
+		// Write output
+		cout << "(DISPLAY) Received USS at time \t" << sc_time_stamp() << endl;
+
+		system("pause"); cout << endl;
+	}
+}
+
 ////////////////////////////
 
+
+////////////////////////////

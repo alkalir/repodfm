@@ -1,6 +1,7 @@
 #include "mainsystem.h"
 #include "define.h"
 
+// Data used to provide debug info
 #ifdef DEBUG_OUT
 	extern sc_time prev_V, prev_A, prev_S, LRL[100], I1[100], I2[100], I3[100], I4[100], I5[100], I6[100];
 	extern unsigned int ilrl, i1, i2, i3, i4, i5, i6;
@@ -437,3 +438,149 @@ void mainsystem::CORE_counter()
 }
 
 ////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+// DFM
+////////////////////////////////////////////////////////
+
+//DFM_UTF
+void mainsystem::DFM_UTF()
+{
+	HEPSY_S(DFM_UTF_id)
+	while(true)
+	{
+		//// Signal UTF from CORE
+		HEPSY_S(DFM_UTF_id)
+		CORE_2_DFM_UTF_4_UTF->read();
+
+		// Signal UTF to DISPLAY
+		HEPSY_S(DFM_UTF_id)
+		UTF->write(true);
+
+		// Profiling
+		HEPSY_P(DFM_UTF_id);
+	}
+}
+
+//DFM_UNE
+void mainsystem::DFM_UNE()
+{
+	// Output to display
+	UNE_info output;
+
+	// Register ALT
+	HEPSY_S(DFM_UNE_id) NV_DISPATCHER_2_DFM_UNE_4_UNE->register_alt();
+	HEPSY_S(DFM_UNE_id) NA_DISPATCHER_2_DFM_UNE_4_UNE->register_alt();
+
+	HEPSY_S(DFM_UNE_id)
+	while(true)
+	{HEPSY_S(DFM_UNE_id)
+
+		// If at least one of the channels are ready...
+		HEPSY_S(DFM_UNE_id)
+		if ((NV_DISPATCHER_2_DFM_UNE_4_UNE->read_test()) || (NA_DISPATCHER_2_DFM_UNE_4_UNE->read_test()))
+		{
+			HEPSY_S(DFM_UNE_id)
+			if (NV_DISPATCHER_2_DFM_UNE_4_UNE->read_test())
+			{
+				// Read UNE_info from NV_DISPATCHER
+				HEPSY_S(DFM_UNE_id) output=NV_DISPATCHER_2_DFM_UNE_4_UNE->read();
+			}
+
+			// Since it is possible to have both no else...
+			HEPSY_S(DFM_UNE_id)
+			if (NA_DISPATCHER_2_DFM_UNE_4_UNE->read_test())
+			{
+				// Read UNE_info from NV_DISPATCHER
+				HEPSY_S(DFM_UNE_id) output=NA_DISPATCHER_2_DFM_UNE_4_UNE->read();
+			}
+
+			// Send to DISPLAY
+			HEPSY_S(DFM_UNE_id) UNE->write(output);
+		}
+		else
+		{
+			PRE_WAIT(DFM_UNE_id)
+			wait(NV_DISPATCHER_2_DFM_UNE_4_UNE->get_alt_event() | NA_DISPATCHER_2_DFM_UNE_4_UNE->get_alt_event());
+			POST_WAIT(DFM_UNE_id)
+		}
+
+		// Profiling
+		HEPSY_P(DFM_UNE_id);
+	}
+}
+
+//DFM_USS
+void mainsystem::DFM_USS()
+{
+	HEPSY_S(DFM_USS_id) pm_state system_state=ND;
+	HEPSY_S(DFM_USS_id) chk_state checker_state=NONE, next_checker_state=NONE;
+
+	HEPSY_S(DFM_USS_id) checker_state=STATE0;
+
+	HEPSY_S(DFM_USS_id)
+	while(true)
+	{
+		//// Signal USS from CORE
+		HEPSY_S(DFM_USS_id)
+		system_state = CORE_2_DFM_USS_4_USS->read();
+
+		switch(checker_state)
+		{
+
+			case STATE0:
+
+				if (system_state == PVARP_state) next_checker_state=STATE0;
+				else if (system_state == AEIr_state) next_checker_state=STATE1;
+				else next_checker_state=ERROR;
+				
+				break;
+
+			case STATE1:
+
+				if (system_state == PVARP_state) next_checker_state=STATE0;
+				else if (system_state == BP_state) next_checker_state=STATE2;
+				else next_checker_state=ERROR;
+
+				break;
+
+			case STATE2:
+
+				if (system_state == CSW_state) next_checker_state=STATE3;
+				else next_checker_state=ERROR;
+
+				break;
+
+			case STATE3:
+
+				if ((system_state == AVIrp_state)||(system_state == AVIr_state)) next_checker_state=STATE4;
+				else next_checker_state=ERROR;
+
+				break;
+
+			case STATE4:
+
+				if (system_state == PVARP_state) next_checker_state=STATE0;
+				else next_checker_state=ERROR;
+
+				break;
+
+			default:
+
+				next_checker_state=ERROR;
+		}
+
+		if (next_checker_state!=ERROR) checker_state=next_checker_state;
+		else
+		{
+			checker_state = STATE0; // Nel tentativo di recuperare (se possibile)...
+
+			// Signal USS to DISPLAY
+			HEPSY_S(DFM_USS_id)
+			USS->write(true);
+		}
+
+		// Profiling
+		HEPSY_P(DFM_USS_id);
+	}
+}

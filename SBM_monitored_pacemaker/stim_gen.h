@@ -43,7 +43,10 @@ SC_MODULE(stim_gen)
 		// Generate natural stimulus
 		SC_THREAD(stimulus);
 
+		// To be changed as needed
+		//ref_bpm=40;
 		ref_bpm=60;
+		//ref_bpm=180;
 	}  
 
 };
