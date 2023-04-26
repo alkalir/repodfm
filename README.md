@@ -1,4 +1,4 @@
-This folder contains the SystemC code related to the SBM as requested by HEPSYCODE (ESL HW/SW Co-Design methodology).
+This folder contains the SystemC code related to the System Behavioral Model (SBM) as requested by HEPSYCODE (ESL HW/SW Co-Design methodology).
 
 In particular:
 - SBM_nominal_FFG: contains the code of the NON monitored Fir-Fir-GCD
