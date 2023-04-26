@@ -1,8 +1,8 @@
-This folder contains the SystemC code related to the SBM of the pacemaker as requested by HEPSYCODE (ESL HW/SW Co-Design methodology).
+This folder contains the SystemC code related to the SBM as requested by HEPSYCODE (ESL HW/SW Co-Design methodology).
 
 In particular:
-- SBM_nominal_FFG: contains the code of the NON monitored FFG
-- SBM_monitored_FFG: contains the code of the monitored FFG
+- SBM_nominal_FFG: contains the code of the NON monitored Fir-Fir-GCD
+- SBM_monitored_FFG: contains the code of the monitored Fir-Fir-GCD
 - SBM_nominal_pacemaker: contains the code of the NON monitored pacemaker
 - SBM_monitored_pacemaker: contains the code of the monitored pacemaker
 
