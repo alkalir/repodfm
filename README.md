@@ -1,15 +1,32 @@
-This folder contains the SystemC code related to the System Behavioral Model (SBM) as requested by HEPSYCODE (ESL HW/SW Co-Design methodology).
+The repository contains the code associated to the experimental results of the paper (TITLE).
 
-In particular:
-- FFG
+Requirements: Matlab v...
+
+Repository structure:
+- FFG contains the experiment related to monitored synthetic application
  - SBM_nominal_FFG: contains the code of the NON monitored Fir-Fir-GCD
  - SBM_monitored_FFG: contains the code of the monitored Fir-Fir-GCD
-- Pacemaker
+
+- Pacemaker contains the experiment related to monitored Pacemaker
  - SBM_nominal_pacemaker: contains the code of the NON monitored pacemaker
  - SBM_monitored_pacemaker: contains the code of the monitored pacemaker
 
-The code can be directly used to perform FUNCTIONAL simulations (i.e., the simulations don't take into account the time needed to perform computations and communications) by compiling it in a C++ environment with SystemC library installed).
+Steps to recreate experiments of FFG:
+- download HEPSYCODE from https://www.hepsycode.com/
+- open FFG folder
+- import the SystemC files contained in the folder SBM_monitored_FFG, representing the FR with the IBMREQ
+- run the tool
+- the DSE1step results will be obtained (they are also contained in the folder DSE1stStep_output)
+- QUI LA PARTE LUIGI...
+- open Matlab
+- execute the script...
 
-stim_gen.cpp file can be modified to provide different Reference Inputs.
-
-To perform HW/SW timing co-simulations there is the need to integrate the SBM in HEPSIM, i.e., the HW/SW co-simulation environment associated to HEPSYCODE.
+Steps to recreate experiments of Pacemaker:
+- download HEPSYCODE from https://www.hepsycode.com/
+- open FFG folder
+- import the SystemC files contained in the folder SBM_monitored_FFG, representing the FR with the IBMREQ
+- run the tool
+- the DSE1step results will be obtained (they are also contained in the folder DSE1stStep_output)
+- QUI LA PARTE LUIGI...
+- open Matlab
+- execute the script ...
